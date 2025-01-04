@@ -1,8 +1,20 @@
 #include "Shape.h"
+#include <set>
+#include <stdexcept>
 
-// No es necesario definir los constructores ni el destructor aquí,
-// ya que ya están definidos en el archivo Shape.h.
+const std::set<std::string> Shape::validColors = {"red", "green", "blue", "yellow", "black", "white"};
 
-// Solo se definirían los métodos no virtuales (si los hubiera), pero 
-// los métodos virtuales puros no se definen en este archivo.
+Shape::Shape(const std::string& color) : color(color) {
+    if (validColors.find(color) == validColors.end()) {
+        throw std::invalid_argument("Invalid color");
+    }
+}
+
+void Shape::set_color(const std::string& newColor) {
+    if (validColors.find(newColor) == validColors.end()) {
+        throw std::invalid_argument("Invalid color");
+    }
+    color = newColor;
+}
+
 

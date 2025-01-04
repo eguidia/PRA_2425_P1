@@ -2,22 +2,18 @@
 #define SQUARE_H
 
 #include "Rectangle.h"
-#include <stdexcept>
-#include <ostream>  
 
 class Square : public Rectangle {
-private:
-    static bool check(Point2D* vertices);
-
 public:
     Square();
     Square(std::string color, Point2D* vertices);
-
-    void set_vertices(Point2D* vertices) override;
-
-    friend std::ostream& operator<<(std::ostream& out, const Square& square);
+    Square(const Square& other);
+    Square& operator=(const Square& other);
+    virtual double area() const override;
+    virtual double perimeter() const override;
+    virtual ~Square();
 
 };
 
-#endif 
+#endif
 

@@ -10,7 +10,7 @@ protected:
     std::string color;
 
 public:
-    Shape() : color("red") {}
+    Shape() : color("green") {}
     Shape(std::string color) {
         if (color != "red" && color != "green" && color != "blue") {
             throw std::invalid_argument("Invalid color");
@@ -19,15 +19,9 @@ public:
     }
 
     std::string get_color() const { return color; }
+    void set_color(const std::string& new_color) { color = new_color; }
 
-    void set_color(std::string c) {
-        if (c != "red" && c != "green" && c != "blue") {
-            throw std::invalid_argument("Invalid color");
-        }
-        color = c;
-    }
-
-    virtual void print() const = 0;
+    virtual void print(std::ostream& out) const = 0;
     virtual double area() const = 0;
     virtual double perimeter() const = 0;
     virtual void translate(double incX, double incY) = 0;

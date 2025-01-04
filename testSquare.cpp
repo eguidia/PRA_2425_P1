@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Square.h"
 #include "Point2D.h"
+#include "Rectangle.h"
 
 int main() {
     Square r1;
