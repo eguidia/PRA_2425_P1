@@ -1,40 +1,63 @@
 #include "Circle.h"
 #include <cmath>
-#include <iostream>
 
-Circle::Circle() : Shape(), center(Point2D(0, 0)), radius(1) {}
+Circle::Circle(){
+	radius = 1;
+	center.x = 0;
+	center.y = 0;
+	color = "red";
 
-Circle::Circle(std::string color, Point2D center, double radius) : Shape(color), center(center), radius(radius) {}
-
-Point2D Circle::get_center() const { return center; }
-
-void Circle::set_center(Point2D p) { center = p; }
-
-double Circle::get_radius() const { return radius; }
-
-void Circle::set_radius(double r) { radius = r; }
-
-void Circle::translate(double incX, double incY) {
-    center.set_x(center.get_x() + incX);
-    center.set_y(center.get_y() + incY);
 }
 
-void Circle::print() const {
-    std::cout << "[Circle: color = " << get_color() << "; center = (" 
-              << center.get_x() << "," << center.get_y() 
-              << "); radius = " << radius << "]";
+Circle::Circle(std::string color, Point2D center, double radius){
+	this->radius = radius;
+	this->center = center;
+	this->color = color;
+
 }
 
-double Circle::area() const {
-    return M_PI * std::pow(radius, 2);
+Point2D Circle::get_center() const{
+	return center; 
+
 }
 
-double Circle::perimeter() const {
-    return 2 * M_PI * radius;
+void Circle::set_center(Point2D p){
+	center.x = p.x;
+	center.y = p.y;
 }
 
-std::ostream& operator<<(std::ostream &out, const Circle &c) {
-    c.print();  // Llama a print(), que ahora es const
-    return out;
+double Circle::get_radius() const{
+	return radius;
 }
 
+void Circle::set_radius(double r){
+	radius = r;
+}
+
+std::ostream& operator<<(std::ostream &out, const Circle &c){
+	out<<"Los datos del circulo son:"<<std::endl<<"Color: "<<c.color<<std::endl<<"Radio: "<<c.radius<<std::endl<<"Centro: "<<c.center;
+	return out;
+}
+
+double Circle::area(){
+	double pi =  M_PI;
+	double rcuadrado = pow(radius,2);
+	double area = pi*rcuadrado;
+	return area;
+}
+
+double Circle::perimeter() {
+	double pi =  M_PI;
+	double perimeter = 2*pi*radius; 
+	return perimeter;
+}
+
+void Circle::translate(double incX, double incY){
+	center.x += incX;
+	center.y += incY;
+} 
+
+void Circle::print(){
+	std::cout<<"Los datos del circulo son:"<<std::endl<<"Color: "<<color<<std::endl<<"Radio: "<<radius<<std::endl<<"Centro: ("<<center<<")"<<std::endl;
+
+}

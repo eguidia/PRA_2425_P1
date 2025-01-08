@@ -3,25 +3,12 @@
 #include "Point2D.h"
 
 int main(){
+    Rectangle r1;
     Point2D* vertices = new Point2D[4];
-
-    vertices[0] = Point2D(-1,0.5);
-    vertices[1] = Point2D(1,0.5);
-    vertices[2] = Point2D(1,-0.5);
-    vertices[3] = Point2D(-1,-0.5);
-    Rectangle r1("red",vertices);
-
-
-
-    std::cout << "r1 = " << r1 << std::endl;
-    std::cout << "r1.area() => " << r1.area() << "; r1.perimeter() => " << r1.perimeter() <<  std::endl;
-
-
     vertices[0] = Point2D(-1,1);
     vertices[1] = Point2D(1,1);
     vertices[2] = Point2D(1,-1);
     vertices[3] = Point2D(-1,-1);
-
     Rectangle r2("green", vertices);
 
     std::cout << "r1 = " << r1 << std::endl;

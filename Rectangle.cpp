@@ -1,73 +1,126 @@
 #include "Rectangle.h"
-#include <stdexcept>
-#include <iostream>
 
-Rectangle::Rectangle() : Shape("undefined"), vertices(new Point2D[N_VERTICES]) {}
 
-Rectangle::Rectangle(std::string color, Point2D* vertices) : Shape(color), vertices(new Point2D[N_VERTICES]) {
-    for (int i = 0; i < N_VERTICES; ++i) {
-        this->vertices[i] = vertices[i];
-    }
+bool Rectangle::check(Point2D* vertices){
+	double d1, d2, d3, d4;
+	
+	d1 = vertices->distance(vertices[0], vertices[1]);
+	d2 = vertices->distance(vertices[2], vertices[3]);
+	d3 = vertices->distance(vertices[1], vertices[2]);
+	d4 = vertices->distance(vertices[0], vertices[3]);
+	
+	if( d1 == d2 && d3 == d4){
+		return true;
+	}
+	else{
+		return false;
+	}	
 }
 
-Rectangle::Rectangle(const Rectangle& other) : Shape(other.get_color()), vertices(new Point2D[N_VERTICES]) {
-    for (int i = 0; i < N_VERTICES; ++i) {
-        this->vertices[i] = other.vertices[i];
-    }
+Rectangle::Rectangle(){
+	color = "red";
+	vs = new Point2D[N_VERTICES];
+	vs[0] = Point2D(-1,0.5);
+	vs[1] = Point2D(1, 0.5);
+	vs[2] = Point2D(1,-0.5);
+	vs[3] = Point2D(-1,-0.5);
 }
 
-Rectangle& Rectangle::operator=(const Rectangle& other) {
-    if (this != &other) {
-        delete[] vertices;
-        vertices = new Point2D[N_VERTICES];
-        for (int i = 0; i < N_VERTICES; ++i) {
-            vertices[i] = other.vertices[i];
+Rectangle::Rectangle(std::string color, Point2D* vertices){
+	this->color = color;
+	vs = new Point2D[N_VERTICES];
+	bool correcto = check(vertices);
+	if(correcto == true){
+	vs[0]= vertices[0];
+	vs[1]= vertices[1];
+	vs[2]= vertices[2];
+	vs[3]= vertices[3];
+	}
+	else{
+		throw std::invalid_argument("Los vértices no forman un rectángulo");
+	}
+}
+
+Rectangle::Rectangle(const Rectangle &r){
+	color = r.color;
+	vs = new Point2D[N_VERTICES];
+	for (int i = 0; i < N_VERTICES; i++){
+		vs[i] = r.vs[i];
+	}
+
+}
+
+Rectangle::~Rectangle(){
+	delete[] vs;
+}
+
+Point2D Rectangle::get_vertex(int ind) {
+	if(ind < 0 || ind > N_VERTICES - 1){
+		throw std::out_of_range("El vértice no existe");
+	}
+	return vs[ind];
+}
+
+void Rectangle::set_vertices(Point2D *vertices){
+	bool r = check(vertices);	
+	if( r == false){
+                throw std::invalid_argument("Estos vértices no forman un rectángulo");
         }
-    }
-    return *this;
+	for(int i = 0; i < N_VERTICES; i++){
+		vs[i] = vertices[i];
+	}
 }
 
-Rectangle::~Rectangle() {
-    delete[] vertices;
+
+Point2D Rectangle::operator[](int ind) {
+	if(ind < 0 || ind >N_VERTICES - 1){
+                throw std::out_of_range("El vértice no existe");
+        }
+        return vs[ind];
 }
 
-Point2D* Rectangle::get_vertices() const {
-    return vertices;
+Rectangle& Rectangle::operator=(const Rectangle &r){
+	delete[] vs;
+	color = r.color;
+        vs = new Point2D[N_VERTICES];
+        for (int i = 0; i < N_VERTICES; i++){
+                vs[i] = r.vs[i];
+        }
+	return *this;
 }
 
-void Rectangle::set_vertices(Point2D* new_vertices) {
-    for (int i = 0; i < N_VERTICES; ++i) {
-        vertices[i] = new_vertices[i];
-    }
+std::ostream& operator<<(std::ostream &out, const Rectangle &r){
+	out<<"Color: "<<r.color<<std::endl<<"Vértices:"<<std::endl<<"v0 = "<<r.vs[0]<<std::endl<<"v1 = "<<r.vs[1]<<std::endl<<"v2 = "<<r.vs[2]<<std::endl<<"v3 = "<<r.vs[3];
+	return out;
+}
+             
+		
+double Rectangle::area(){
+	double area, d1, d2; 
+	d1 = vs->distance(vs[0], vs[1]);  
+	d2 = vs->distance(vs[1], vs[2]);
+	area = d1 * d2;
+	
+	return area;
 }
 
-Point2D Rectangle::get_vertex(int index) const {
-    if (index < 0 || index >= N_VERTICES) {
-        throw std::out_of_range("Index out of bounds");
-    }
-    return vertices[index];
+double Rectangle::perimeter(){
+	double perimeter, d1, d2;
+	d1 = vs->distance(vs[0], vs[1]);  
+        d2 = vs->distance(vs[1], vs[2]);	
+        perimeter = 2*d1 + 2*d2;
+
+	return perimeter;
 }
 
-Point2D Rectangle::operator[](int index) const {
-    return get_vertex(index);
+void Rectangle::translate(double incX, double incY){
+	for (int i = 0; i < N_VERTICES; i++){
+		vs[i].x += incX;
+		vs[i].y += incY;
+	}
 }
 
-void Rectangle::translate(double dx, double dy) {
-    for (int i = 0; i < N_VERTICES; ++i) {
-        vertices[i].set_x(vertices[i].get_x() + dx);
-        vertices[i].set_y(vertices[i].get_y() + dy);
-    }
-}
-
-void Rectangle::print(std::ostream& out) const {
-    out << "Rectangle vertices: ";
-    for (int i = 0; i < N_VERTICES; ++i) {
-        out << "(" << vertices[i].get_x() << ", " << vertices[i].get_y() << ") ";
-    }
-}
-
-std::ostream& operator<<(std::ostream& out, const Rectangle& rect) {
-    rect.print(out);
-    return out;
+void Rectangle::print(){
+	std::cout<<"Color: "<<color<<std::endl<<"Vértices:"<<std::endl<<"v0 = "<<vs[0]<<std::endl<<"v1 = "<<vs[1]<<std::endl<<"v2 = "<<vs[2]<<std::endl<<"v3 = "<<vs[3];
 }
 
